@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة طلبات الزواج - الداعية مدين</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root { --gold: #c5a059; --dark-gold: #8a6d3b; --bg-color: #fdfbf7; }
+        body { font-family: 'Noto Kufi Arabic', sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; }
+        .main-container { max-width: 700px; margin: 40px auto; background: #ffffff; border-radius: 35px; box-shadow: 0 40px 100px rgba(0,0,0,0.08); border: 1px solid rgba(197, 160, 89, 0.2); overflow: hidden; }
+        .header-bg { background: linear-gradient(135deg, #fffcf5 0%, #f7f1e3 100%); padding: 60px 20px 40px; text-align: center; }
+        .profile-frame { width: 210px; height: 210px; margin: 0 auto 25px; border-radius: 50%; padding: 10px; background: linear-gradient(45deg, #BF953F, #FCF6BA, #B38728); }
+        .profile-frame img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 5px solid white; }
+        h1 { font-family: 'Amiri', serif; color: var(--dark-gold); font-size: 3rem; margin: 0; }
+        .content-body { padding: 40px; }
+        .shuroot-section { background: #f4ecd8; border-radius: 20px; padding: 25px; margin-bottom: 40px; }
+        .shuroot-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; list-style: none; padding: 0; }
+        .shuroot-list li::before { content: "✦"; margin-left: 8px; color: var(--gold); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #666; font-size: 0.85rem; }
+        input, select, textarea { width: 100%; padding: 15px; border: 1px solid #e0e0e0; border-radius: 12px; font-family: 'Noto Kufi Arabic'; box-sizing: border-box; }
+        .btn-submit { width: 100%; padding: 22px; background: linear-gradient(45deg, #AA771C, #D4AF37); border: none; border-radius: 15px; color: white; font-weight: 800; font-size: 1.4rem; cursor: pointer; margin-top: 30px; }
+        #result-display { margin-top: 35px; padding: 30px; border-radius: 20px; text-align: center; display: none; }
+        .status-img { width: 180px; height: 180px; border-radius: 20px; margin-bottom: 15px; object-fit: cover; border: 3px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .eligible-res { background: #f0fff4; color: #166534; border: 2px solid #166534; }
+        .rejected-res { background: #fff5f5; color: #991b1b; border: 2px solid #991b1b; }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="header-bg">
+        <div class="profile-frame">
+            <img src="madin.jpg.jpeg" alt="الداعية مدين" onerror="this.onerror=null; this.src='madin.jpg';">
+        </div>
+        <h1>الداعية مدين</h1>
+        <p style="color: #999;">بوابة طلبات الزواج الرسمية</p>
+    </div>
+
+    <div class="content-body">
+        <div class="shuroot-section">
+            <h3 style="color: var(--dark-gold); margin-top:0;">📜 الشروط المطلوبة:</h3>
+            <ul class="shuroot-list">
+                <li>أن تكون عذراء</li>
+                <li>الطول 170 سم فأكثر</li>
+                <li>البشرة بيضاء أو حنطية</li>
+                <li>الوزن 50 كجم أو أقل</li>
+                <li>العمر (21 - 25) سنة</li>
+                <li>ثروة أو وظيفة مرموقة</li>
+            </ul>
+        </div>
+
+        <div class="form-grid">
+            <div class="full-width"><label>الاسم الكامل</label><input type="text" id="fname" placeholder="الاسم الثلاثي"></div>
+            <div><label>العمر</label><input type="number" id="fage" placeholder="22"></div>
+            <div><label>البشرة</label>
+                <select id="fskin">
+                    <option value="p">بيضاء / حنطية</option>
+                    <option value="f">سمراء</option>
+                </select>
+            </div>
+            <div><label>الطول (سم)</label><input type="number" id="fheight" placeholder="172"></div>
+            <div><label>الوزن (كجم)</label><input type="number" id="fweight" placeholder="48"></div>
+            <div class="full-width"><label>الحالة</label>
+                <select id="fvirgin">
+                    <option value="p">عذراء</option>
+                    <option value="f">غير ذلك</option>
+                </select>
+            </div>
+            <div class="full-width"><label>الثروة والوظيفة</label><textarea id="fwealth" rows="2"></textarea></div>
+        </div>
+
+        <button class="btn-submit" onclick="submitApp()">ارسال الطلب</button>
+
+        <div id="result-display">
+            <img src="" id="status-icon" class="status-img" onerror="this.onerror=null; this.src=this.src.replace('.jpg.jpeg', '.jpg');">
+            <div id="status-text" style="font-size: 1.5rem; font-weight: 800;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function submitApp() {
+        const name = document.getElementById('fname').value;
+        const age = parseInt(document.getElementById('fage').value);
+        const height = parseInt(document.getElementById('fheight').value);
+        const weight = parseInt(document.getElementById('fweight').value);
+        const skin = document.getElementById('fskin').value;
+        const virgin = document.getElementById('fvirgin').value;
+        
+        const resultDiv = document.getElementById('result-display');
+        const statusImg = document.getElementById('status-icon');
+        const statusText = document.getElementById('status-text');
+
+        if(!name || isNaN(age)) {
+            alert("يرجى إكمال البيانات الأساسية");
+            return;
+        }
+
+        // منطق الشروط
+        let pass = (age >= 21 && age <= 25) && (height >= 170) && (weight <= 50) && (skin === 'p') && (virgin === 'p');
+
+        resultDiv.style.display = "block";
+
+        if(pass) {
+            resultDiv.className = "eligible-res";
+            statusImg.src = "success.jpg.jpeg"; 
+            statusText.innerHTML = "مؤهلة للزواج ✅<br><span style='font-size:1.1rem; font-weight:400;'>أهلاً بك يا " + name + "، انطبقت عليك الشروط.</span>";
+        } else {
+            resultDiv.className = "rejected-res";
+            statusImg.src = "fail.jpg.jpeg"; 
+            statusText.innerHTML = "مرفوضة للزواج ❌<br><span style='font-size:1.1rem; font-weight:400;'>نعتذر منك يا " + name + "، لم تتطابق الشروط.</span>";
+        }
+        
+        resultDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
